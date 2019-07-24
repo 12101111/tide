@@ -237,21 +237,6 @@ impl<State: Send + Sync + 'static> App<State> {
         }
     }
 
-    /// Run the app at the given address.
-    ///
-    /// Blocks the calling thread indefinitely.
-    #[cfg(feature = "hyper")]
-    pub fn run(self, addr: impl std::net::ToSocketAddrs) -> std::io::Result<()> {
-        let addr = addr
-            .to_socket_addrs()?
-            .next()
-            .ok_or(std::io::ErrorKind::InvalidInput)?;
-
-        println!("Server is listening on: http://{}", addr);
-        http_service_hyper::run(self.into_http_service(), addr);
-        Ok(())
-    }
-
     /// Asynchronously serve the app at the given address.
     #[cfg(feature = "hyper")]
     pub async fn serve(self, addr: impl std::net::ToSocketAddrs) -> std::io::Result<()> {
